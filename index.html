@@ -1,0 +1,121 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Randevu Onayı</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background: #f7f7f7;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 32px;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .buttons {
+            position: relative;
+            width: 100%;
+            max-width: 360px;
+            height: 160px;
+        }
+
+        button {
+            font-size: 20px;
+            padding: 12px 28px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: transform 0.2s ease, background 0.2s ease;
+        }
+
+        #yesBtn {
+            background: #4CAF50;
+            color: white;
+            margin-right: 20px;
+        }
+
+        #yesBtn:hover {
+            background: #45A049;
+            transform: scale(1.05);
+        }
+
+        #noBtn {
+            background: #f44336;
+            color: white;
+            position: absolute;
+        }
+
+        @media(max-width: 480px) {
+            h1 {
+                font-size: 24px;
+            }
+
+            button {
+                font-size: 16px;
+                padding: 10px 20px;
+            }
+
+            .buttons {
+                height: 120px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Randevuya Hazır Mısın?</h1>
+    <div class="buttons">
+        <!-- WhatsApp numaranızı international formatla girin, örn: 905xxxxxxxxx -->
+        <button id="yesBtn" onclick="sendWhatsApp()">Evet</button>
+        <button id="noBtn">Hayır</button>
+    </div>
+
+    <script>
+        const noBtn = document.getElementById('noBtn');
+        const container = document.querySelector('.buttons');
+        function moveNoButton() {
+            const maxX = container.clientWidth - noBtn.clientWidth;
+            const maxY = container.clientHeight - noBtn.clientHeight;
+            const x = Math.random() * maxX;
+            const y = Math.random() * maxY;
+            noBtn.style.left = x + 'px';
+            noBtn.style.top = y + 'px';
+        }
+        // Mobilde sadece tıklama, masaüstünde tıklama/hover
+        function setupNoBtnEvents() {
+            const isMobile = window.matchMedia('(max-width: 480px)').matches;
+            const events = isMobile ? ['click'] : ['click', 'mouseenter'];
+            events.forEach(evt => noBtn.addEventListener(evt, moveNoButton, { passive: false }));
+        }
+        setupNoBtnEvents();
+        window.addEventListener('resize', () => {
+            // Listenerları resetlemek için butonu klonla
+            const clone = noBtn.cloneNode(true);
+            noBtn.parentNode.replaceChild(clone, noBtn);
+            setupNoBtnEvents();
+        });
+
+        function sendWhatsApp() {
+            const phone = '90xxxxxxxxx'; // kendi numaranızı yazın
+            const message = encodeURIComponent('Randevuya hazırım, geç kalma.');
+            window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
+        }
+    </script>
+</body>
+
+</html>
